@@ -1,39 +1,34 @@
-import string
 import json
 
-CHARS = string.ascii_lowercase.__iter__()
 
+class LinkGenerator:
 
-class link_generator:
+    def __init__(self, domain, path):
+        self.domain = f'https://en.wikipedia.org/wiki/{domain}'
+        self.path = path
 
-    def __init__(self, domain, max_len=10):
-        self.max_len = max_len
-        self.domain = f'https://en.wikipedia.org/wiki/{domain}/'
-        self.last_country = []
-        self.chars = CHARS.__iter__()
-
-    def __iter__(self):
+    def __enter__(self):
+        self.file = open(self.path, "a", encoding="utf8")
         return self
 
-    def __next__(self):
-        if not self.last_country:
-            self.last_country = (self.chars.__next__())
-        elif len(self.last_country) > self.max_len:
-            raise StopIteration
-        elif self.last_country[-1] == 'z':
-            self.chars = CHARS.__iter__()
-            self.last_country.append(self.chars.__next__())
-        else:
-            self.last_country.append(self.chars.__next__())
-        yield f'{self.domain}{"".join(self.domain)}{"/".join(self.last_country)}'
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type:
+            self.file.write(f'\n {self.domain, items["official"]} Ошибка {exc_type} {exc_val}\n')
+        self.file.close()
+
+    def write_in_log(self):
+        self.file.write(f"\n INFO {self.domain, items['official']} \n")
 
 
 with open("countries.json", encoding="utf-8-sig") as file:
     json_data = file.read()
 data = json.loads(json_data)
+
+
 for countries in data:
     items = countries['name']
-
-    for i in link_generator(items['official']):
-        print(i)
-        break
+    for i in LinkGenerator(items['official']):
+        countries = LinkGenerator('countries.txt')
+        with LinkGenerator('countries.txt') as countries:
+            countries.write_in_log()
+            print(countries)
