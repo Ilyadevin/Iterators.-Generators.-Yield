@@ -1,4 +1,5 @@
 import json
+import hashlib
 
 
 class LinkGenerator:
@@ -15,6 +16,7 @@ class LinkGenerator:
         if exc_type:
             self.file.write(f'\n {self.domain, items["official"]} Ошибка {exc_type} {exc_val}\n')
         self.file.close()
+        yield
 
     def write_in_log(self):
         self.file.write(f"\n INFO {self.domain, items['official']} \n")
@@ -27,8 +29,11 @@ data = json.loads(json_data)
 
 for countries in data:
     items = countries['name']
-    for i in LinkGenerator(items['official']):
-        countries = LinkGenerator('countries.txt')
-        with LinkGenerator('countries.txt') as countries:
-            countries.write_in_log()
-            print(countries)
+    for i in items.values():
+        with LinkGenerator(i, 'countries.txt') as generator:
+            generator.write_in_log()
+
+
+with open('countries.txt') as cont:
+    countries_1 = hashlib.md5()
+    countries_1.hexdigest()
