@@ -34,6 +34,11 @@ for countries in data:
             generator.write_in_log()
 
 
-with open('countries.txt') as cont:
-    countries_1 = hashlib.md5()
-    countries_1.hexdigest()
+with open('countries.txt', encoding='utf-8-sig') as cont:
+    strings = cont.read().splitlines()
+    for i in strings:
+        i_utf8 = i.encode("utf-8")
+        hash = hashlib.md5(i_utf8)
+        hexa = hash.hexdigest()
+
+        print(hexa)
