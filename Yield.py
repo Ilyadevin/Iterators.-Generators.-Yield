@@ -21,6 +21,16 @@ class LinkGenerator:
     def write_in_log(self):
         self.file.write(f"\n INFO {self.domain, items['official']} \n")
 
+    def md5_hash(self):
+        with open('countries.txt', encoding='utf-8-sig') as cont:
+            strings = cont.read().splitlines()
+            for i in strings:
+                i_utf8 = i.encode("utf-8")
+                hash = hashlib.md5(i_utf8)
+                hexa = hash.hexdigest()
+
+                print(hexa)
+
 
 with open("countries.json", encoding="utf-8-sig") as file:
     json_data = file.read()
@@ -34,11 +44,4 @@ for countries in data:
             generator.write_in_log()
 
 
-with open('countries.txt', encoding='utf-8-sig') as cont:
-    strings = cont.read().splitlines()
-    for i in strings:
-        i_utf8 = i.encode("utf-8")
-        hash = hashlib.md5(i_utf8)
-        hexa = hash.hexdigest()
-
-        print(hexa)
+generator.md5_hash()
