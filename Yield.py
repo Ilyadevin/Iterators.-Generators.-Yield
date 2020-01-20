@@ -29,7 +29,7 @@ class LinkGenerator:
                 hash = hashlib.md5(i_utf8)
                 hexa = hash.hexdigest()
 
-                print(hexa)
+                yield hexa
 
 
 with open("countries.json", encoding="utf-8-sig") as file:
@@ -42,6 +42,5 @@ for countries in data:
     for i in items.values():
         with LinkGenerator(i, 'countries.txt') as generator:
             generator.write_in_log()
-
-
-generator.md5_hash()
+            for hashed_string in LinkGenerator.md5_hash():
+                print(hashed_string)
